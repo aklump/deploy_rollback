@@ -1,0 +1,3 @@
+.idea
+lib/lobster/*
+!lib/lobster/dist

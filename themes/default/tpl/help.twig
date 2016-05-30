@@ -1,0 +1,17 @@
+usage: deploy <command> [<args>]
+
+These are your available commands:
+
+    offline   Take your website offline for testing.
+
+    online    Bring your website online for normal traffic.
+
+    pull      Deploy the project. This option will back up the database and then do a git pull, after which it will run a drupal database update and clear the caches. It will also make a note of the current position to be used if you need to rollback. Optional arguments:
+
+              --no-updb   Do not run the Drupal database update.
+              --no-cc     Do not clear Drupal's cache.
+
+
+   rollback   Rollback to the state before last `pull` command.
+
+Calling 'deploy' without a command is equivalent to 'deploy help'

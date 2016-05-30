@@ -1,0 +1,8 @@
+At this time you should make sure the deployment went okay.
+
+Your site is currently offline, which means you have time to review it while logged in as an administrator.  However, be advised that regular visitors to the site will not see the site until you bring it back online.  Therefore you should perform your testing as quickly as possible, but do so carefully because...
+
+Once your bring the site back online, though you may rollback, you will loose any database changes that have occurred since the time of this deployment and the time you execute the rollback.
+
+You will next be asked if you wish to rollback the update, and if you decline, if you are ready to bring the site back online.  If you decline that second question, you may always get your site out of maintenance mode later using 'deploy online'.
+
