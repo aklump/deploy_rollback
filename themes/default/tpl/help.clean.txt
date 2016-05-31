@@ -1,0 +1,1 @@
+Deletes the connection to the git commit for a rollback.  This command does not remove the database backup file which is still present in the database folder.

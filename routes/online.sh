@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-# Take drupal offline and echo a response
+#
+# Take drupal online and echo a response
+#
 
 lobster_notice "Checking Drupal status..."
 changed=false

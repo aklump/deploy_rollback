@@ -1,0 +1,12 @@
+usage: deploy <command> [<args>]
+
+These are your available commands, type 'deploy help <command>' for more info:
+
+  status      See the status of your environment.
+  offline     Take your website offline for testing.
+  online      Bring your website online for normal traffic.
+  pull        Deploy the project.
+  rollback    Rollback to the state before last `pull` command.
+  clean       Remove rollback data to prevent a rollback.
+
+Calling 'deploy' without a command is equivalent to 'deploy help'

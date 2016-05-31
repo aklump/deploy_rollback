@@ -25,3 +25,10 @@ function is_drupal_online() {
   fi
   return 1;
 }
+
+function may_rollback() {
+  if test -e "$rb_data_dir/hash_rollback.txt"; then
+    return 0
+  fi
+  return 1;
+}

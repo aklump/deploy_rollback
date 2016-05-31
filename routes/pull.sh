@@ -1,5 +1,15 @@
 #!/usr/bin/env bash
+#
+# Route to pull down and deploy
+#
 cd $rb_drupal_root
+
+# Fail if there are any local modifications
+if [ -n "$($rb_git status --porcelain)" ]; then
+  $rb_git status --porcelain
+  lobster_log deploy "Deployed to the $rb_site_role environment failed due to local changes." pull_fail
+  lobster_failed "Changes to the $rb_site_role environment preclude automated deployment. You should make changes on another server and commit them and clean up this server before trying again."
+fi
 
 hash=$($rb_git rev-parse HEAD)
 
@@ -10,14 +20,23 @@ lobster_notice "Storing the current hash for later rollback, if needed..."
 lobster_notice $hash
 echo $hash > $rb_data_dir/hash_rollback.txt
 
+# Take drupal offline.
 lobster_color_echo yellow "Insuring site is offline..."
-$LOBSTER_APP offline --lobster-nowrap
+force=''
+if lobster_has_flag "f"; then
+  force='-f'
+fi
+$LOBSTER_APP offline --lobster-nowrap $force
+
+lobster_success "Merging in codebase from origin..."
+if ! $rb_git merge --ff-only; then
+  lobster_error "The Git merge failed."
+  $LOBSTER_APP online --lobster-nowrap
+  lobster_failed
+fi
 
 lobster_success "Backing up the database..."
 $rb_loft_deploy export $hash -f
-
-lobster_success "Merging in codebase from origin..."
-$rb_git pull
 
 # Update the database unless we have the param to not do so.
 if ! lobster_has_param 'noupdb'; then
@@ -39,9 +58,9 @@ fi
 lobster_color pink
 lobster_theme go_test
 
-if lobster_confirm "Did it fail? Do you wish to rollback" && lobster_confirm "Are you certain you want to rollback to an earlier state?"; then
+if lobster_confirm "Did it fail? Do you wish to rollback" && lobster_confirm "ROLLBACK, are you sure?"; then
   $LOBSTER_APP rollback -f --lobster-nowrap
-elif lobster_confirm "Ready to switch out of maintenance mode?"; then
+elif lobster_confirm "Ready to bring the site back online?"; then
   $LOBSTER_APP online -f --lobster-nowrap
 else
   lobster_warning "When you're ready you may bring the site back online using 'deploy online'"
