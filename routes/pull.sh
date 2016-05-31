@@ -5,13 +5,13 @@
 cd $rb_drupal_root
 
 # Fail if there are any local modifications
-if [ -n "$($rb_git status --porcelain)" ]; then
-  $rb_git status --porcelain
+if [ -n "$(cd $rb_git_root && $rb_git status --porcelain)" ]; then
+  (cd $rb_git_root && $rb_git status --porcelain)
   lobster_log deploy "Deployed to the $rb_site_role environment failed due to local changes." pull_fail
   lobster_failed "Changes to the $rb_site_role environment preclude automated deployment. You should make changes on another server and commit them and clean up this server before trying again."
 fi
 
-hash=$($rb_git rev-parse HEAD)
+hash=$(cd $rb_git_root && $rb_git rev-parse HEAD)
 
 # Logging this activity
 lobster_log deploy "Deployed to the $rb_site_role environment ($hash)." pull
@@ -29,7 +29,7 @@ fi
 $LOBSTER_APP offline --lobster-nowrap $force
 
 lobster_success "Merging in codebase from origin..."
-if ! $rb_git merge --ff-only; then
+if ! (cd $rb_git_root && $rb_git merge --ff-only); then
   lobster_error "The Git merge failed."
   $LOBSTER_APP online --lobster-nowrap
   lobster_failed

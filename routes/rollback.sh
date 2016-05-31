@@ -27,7 +27,7 @@ lobster_success "Restoring the database..."
 $rb_loft_deploy import $hash -f
 
 # Rollback GIT
-$rb_git reset --hard $hash
+(cd $rb_git_root && $rb_git reset --hard $hash)
 
 # Take the site online.
 $LOBSTER_APP online -f --lobster-nowrap
