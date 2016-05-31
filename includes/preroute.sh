@@ -9,9 +9,14 @@ if [ "$rb_op" == "init" ] || [ "$rb_op" == "help" ]; then
   return
 fi
 
+# Verify dependencies
+if [ ! $rb_git ] ; then
+   lobster_failed "Git must be installed on system; see \$rb_git  in $LOBSTER_APP_ROOT/$lobster_app_config"
+fi
+
 # Verify drupal root is defined.
 if [ ! "$rb_drupal_root" ]; then
-  lobster_failed "You must configure $rb_drupal_root first in $LOBSTER_APP_ROOT/$lobster_app_config"
+  lobster_failed "You must configure \$rb_drupal_root first in $LOBSTER_APP_ROOT/$lobster_app_config"
 fi
 
 # Verify drupal root exists.
@@ -22,7 +27,4 @@ fi
 # Make sure we have the rollback directory
 [ ! -d $rb_data_dir ] || mkdir -p $rb_data_dir
 
-if [ ! $rb_git ] ; then
-   lobster_failed "Git must be installed on system; see $rb_git  in $LOBSTER_APP_ROOT/$lobster_app_config"
-fi
 

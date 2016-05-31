@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 rb_version="0.1.1"
+rb_drush=$(which drush)
+rb_loft_deploy=$(which loft_deploy)
+rb_git=$(which git)
 
 # If we're not initialized then make note.
 if [ ! "$LOBSTER_PWD_ROOT" ]; then
