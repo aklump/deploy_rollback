@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-rb_version="0.1.1"
+rb_version="0.1.2"
 rb_drush=$(which drush)
 rb_loft_deploy=$(which loft_deploy)
 rb_git=$(which git)
