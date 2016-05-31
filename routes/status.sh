@@ -7,6 +7,9 @@ lobster_echo "- Environment: $rb_site_title ($rb_site_role)"
 lobster_echo "- Drupal root: $rb_drupal_root"
 lobster_echo "- Logs dir: $lobster_logs"
 lobster_echo "- DB dir: $rb_db_dir"
+lobster_echo "- Drush: $rb_drush"
+lobster_echo "- Loft Deploy: $rb_loft_deploy"
+lobster_echo "- Git: $rb_git"
 lobster_echo
 
 lobster_echo "Checking Git status for '$rb_site_title'..."

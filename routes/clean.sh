@@ -10,7 +10,7 @@ if may_rollback; then
 fi
 
 if ! may_rollback; then
-  lobster_success "Purged, rollback will not be possible until after the next pull operation."
+  lobster_success "The project is clean; rollback will not be possible until after the next pull operation."
 else
   lobster_failed
 fi
