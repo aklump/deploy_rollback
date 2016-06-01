@@ -2,5 +2,6 @@ This option will back up the database and then do a git pull, after which it wil
 
 Optional parameters for 'pull':
 
+--nooff   Do not take site offline for the deployment.
 --nocc    Do not clear website caches.
 --noupdb  Do not perform the database updates.

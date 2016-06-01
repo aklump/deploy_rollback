@@ -21,17 +21,21 @@ lobster_notice $hash
 echo $hash > $rb_data_dir/hash_rollback.txt
 
 # Take drupal offline.
-lobster_color_echo yellow "Insuring site is offline..."
-force=''
-if lobster_has_flag "f"; then
-  force='-f'
+if ! lobster_has_param "nooff"; then
+  lobster_color_echo yellow "Insuring site is offline..."
+  force=''
+  if   lobster_has_flag "f"; then
+    force='-f'
+  fi
+  $LOBSTER_APP offline --lobster-nowrap $force
 fi
-$LOBSTER_APP offline --lobster-nowrap $force
 
 lobster_success "Merging in codebase from origin..."
 if ! (cd $rb_git_root && $rb_git $rb_git_fetch_command && $rb_git $rb_git_merge_command); then
   lobster_error "The Git fetch/merge failed."
-  $LOBSTER_APP online --lobster-nowrap
+  if ! lobster_has_param "nooff"; then
+    $LOBSTER_APP online --lobster-nowrap
+  fi
   lobster_failed
 fi
 
@@ -60,7 +64,7 @@ lobster_theme go_test
 
 if lobster_confirm "Did it fail? Do you wish to rollback" && lobster_confirm "ROLLBACK, are you sure?"; then
   $LOBSTER_APP rollback -f --lobster-nowrap
-elif lobster_confirm "Ready to bring the site back online?"; then
+elif ! lobster_has_param "nooff" && lobster_confirm "Ready to bring the site back online?"; then
   $LOBSTER_APP online -f --lobster-nowrap
 else
   lobster_warning "When you're ready you may bring the site back online using 'deploy online'"
