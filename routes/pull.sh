@@ -64,8 +64,10 @@ lobster_theme go_test
 
 if lobster_confirm "Did it fail? Do you wish to rollback" && lobster_confirm "ROLLBACK, are you sure?"; then
   $LOBSTER_APP rollback -f --lobster-nowrap
-elif ! lobster_has_param "nooff" && lobster_confirm "Ready to bring the site back online?"; then
-  $LOBSTER_APP online -f --lobster-nowrap
-else
-  lobster_warning "When you're ready you may bring the site back online using 'deploy online'"
+elif ! lobster_has_param "nooff"; then
+  if lobster_confirm "Ready to bring the site back online?"; then
+    $LOBSTER_APP online -f --lobster-nowrap
+  else
+    lobster_warning "When you're ready you may bring the site back online using 'deploy online'"
+  fi
 fi
