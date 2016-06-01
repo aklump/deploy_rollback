@@ -5,7 +5,7 @@
 cd $rb_drupal_root
 
 # Fail if there are any local modifications
-if [ -n "$(cd $rb_git_root && $rb_git status --porcelain)" ]; then
+if [ -n "$(cd $rb_git_root && $rb_git status --untracked-files=no --porcelain)" ]; then
   (cd $rb_git_root && $rb_git status --untracked-files=no --porcelain)
   lobster_log deploy "Deployed to the $rb_site_role environment failed due to local changes." pull_fail
   lobster_failed "Changes to the $rb_site_role environment preclude automated deployment. You should make changes on another server and commit them and clean up this server before trying again."
