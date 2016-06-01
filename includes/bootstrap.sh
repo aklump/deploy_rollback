@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-rb_version="0.1.17"
+rb_version="0.1.18"
 
 # If we're not initialized then make note.
 if [ ! "$LOBSTER_PWD_ROOT" ]; then
