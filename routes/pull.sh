@@ -39,8 +39,11 @@ if ! (cd $rb_git_root && $rb_git $rb_git_fetch_command && $rb_git $rb_git_merge_
   lobster_failed
 fi
 
-lobster_success "Backing up the database..."
-$rb_loft_deploy export $hash -f
+# Database backup
+if ! lobster_has_param "nobu"; then
+  lobster_success "Backing up the database..."
+  $rb_loft_deploy export $hash -f
+fi
 
 # Update the database unless we have the param to not do so.
 if ! lobster_has_param 'noupdb'; then

@@ -1,7 +1,8 @@
-This option will back up the database and then do a git pull, after which it will run a drupal database update and clear the caches. It will also make a note of the current position to be used if you need to rollback. Optional arguments:
+This option will insure there have been no local changes, take the site offline, do a git fetch/merge, backup the database, run a drupal database update, and finally, clear the caches. It will also make a note of the current position to be used if you need to rollback. Optional arguments:
 
 Optional parameters for 'pull':
 
 --nooff   Do not take site offline for the deployment.
+--nobu    Do not backup the database for this deployment.
 --nocc    Do not clear website caches.
 --noupdb  Do not perform the database updates.
