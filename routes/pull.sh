@@ -29,8 +29,8 @@ fi
 $LOBSTER_APP offline --lobster-nowrap $force
 
 lobster_success "Merging in codebase from origin..."
-if ! (cd $rb_git_root && $rb_git $rb_git_merge_command); then
-  lobster_error "The Git merge failed."
+if ! (cd $rb_git_root && $rb_git $rb_git_fetch_command && $rb_git $rb_git_merge_command); then
+  lobster_error "The Git fetch/merge failed."
   $LOBSTER_APP online --lobster-nowrap
   lobster_failed
 fi
