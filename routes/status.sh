@@ -14,8 +14,8 @@ lobster_echo "- Git: $rb_git"
 lobster_echo
 
 lobster_echo "Checking Git status for '$rb_site_title'..."
-$rb_git fetch
-$rb_git status
+(cd $rb_git_root && $rb_git fetch)
+(cd $rb_git_root && $rb_git status)
 
 lobster_echo
 lobster_echo "Checking Website status for '$rb_site_title'..."
