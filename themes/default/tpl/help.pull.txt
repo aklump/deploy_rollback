@@ -6,3 +6,6 @@ Optional parameters for 'pull':
 --nobu    Do not backup the database for this deployment.
 --nocc    Do not clear website caches.
 --noupdb  Do not perform the database updates.
+
+--fast    If you want to do the fastest and least safe pull, use --fast as a shorthand for
+          --nooff, --nobu, --nocc, --noupdb.
