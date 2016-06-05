@@ -84,7 +84,7 @@ else
 fi
 
 # Clear all caches unless we have the parameter to not do so.
-if ! lobster_has_param 'nocc' && ! lobster_has_param 'fast'; then
+if ! lobster_has_param 'nocc'; then
   lobster_color_echo yellow "Clearing Drupal's cache..."
   $rb_drush cc all
 else
