@@ -31,7 +31,7 @@ if ! lobster_has_param "noupdb" && ! lobster_has_param 'fast'; then
 else
   lobster_color_echo "yellow" "- The database update will not run"
 fi
-if ! lobster_has_param "nocc" && ! lobster_has_param 'fast'; then
+if ! lobster_has_param "nocc"; then
   lobster_color_echo $color "- The site caches will be cleared"
 else
   lobster_color_echo "yellow" "- The site caches will not be cleared"
