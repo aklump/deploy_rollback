@@ -72,13 +72,13 @@ fi
 # Database backup
 if ! lobster_has_param "nobu" && ! lobster_has_param 'fast'; then
   lobster_success "Backing up the database..."
-  $rb_loft_deploy export $hash -f
+  (cd $rb_loft_deploy_root && $rb_loft_deploy export $hash -f)
 fi
 
 # Update the database unless we have the param to not do so.
 if ! lobster_has_param 'noupdb' && ! lobster_has_param 'fast'; then
   lobster_color_echo yellow "Running Drupal database updates, if any..."
-  $rb_drush updb
+  (cd $rb_drush_root && $rb_drush updb)
 else
   lobster_color_echo yellow 'Skipping database updates per --noupdb'
 fi
@@ -86,7 +86,7 @@ fi
 # Clear all caches unless we have the parameter to not do so.
 if ! lobster_has_param 'nocc'; then
   lobster_color_echo yellow "Clearing Drupal's cache..."
-  $rb_drush cc all
+  (cd $rb_drush_root && $rb_drush cc all)
 else
   lobster_color_echo yellow 'Skipping drupal cache clearing per --nocc'
 fi

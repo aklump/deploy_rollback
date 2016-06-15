@@ -24,7 +24,7 @@ $LOBSTER_APP offline -f --lobster-nowrap
 
 # Rollback the db
 lobster_success "Restoring the database..."
-$rb_loft_deploy import $hash -f
+(cd $rb_loft_deploy_root && $rb_loft_deploy import $hash -f)
 
 # Rollback GIT
 (cd $rb_git_root && $rb_git reset --hard $hash)

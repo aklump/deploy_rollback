@@ -7,7 +7,7 @@ lobster_notice "Checking Drupal status..."
 changed=false
 if ! is_drupal_online; then
   changed=true
-  (cd $rb_drupal_root && $rb_drush vset site_offline 0)
+  (cd $rb_drush_root && $rb_drush vset site_offline 0)
 fi
 
 if ! is_drupal_online; then

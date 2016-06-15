@@ -6,7 +6,7 @@ lobster_notice "Checking Drupal status..."
 changed=false
 if is_drupal_online && (lobster_has_flag f || lobster_confirm "Are you sure you want to take the site offline?"); then
   changed=true
-  (cd $rb_drupal_root && $rb_drush vset site_offline 1)
+  (cd $rb_drush_root && $rb_drush vset site_offline 1)
 fi
 
 if is_drupal_online; then
