@@ -10,5 +10,5 @@ if [ ! "$LOBSTER_PWD_ROOT" ]; then
 else
   rb_installed=true
   rb_data_dir=$LOBSTER_PWD_ROOT/.rollback
-  rb_db_dir=$($rb_loft_deploy get local_db_dir)
+  rb_db_dir=$(cd $rb_loft_deploy_root && $rb_loft_deploy get local_db_dir)
 fi
