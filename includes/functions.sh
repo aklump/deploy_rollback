@@ -19,7 +19,7 @@ function is_drupal_root () {
 # Determine if drupal is online or not.
 #
 function is_drupal_online() {
-  status=$(cd $rb_drupal_root && $rb_drush vget site_offline --exact)
+  status=$(cd $rb_drush_root && $rb_drush vget site_offline --exact)
   regex="true|1"
   if [[ "$status" =~ $regex ]]; then
     return 1;
