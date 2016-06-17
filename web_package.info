@@ -1,4 +1,4 @@
 name = "Deploy Rollback"
 description = "A script to simplify the deployment of Drupal websites with rollback."
-version = "0.1.28"
+version = "0.1.29"
 author = "Aaron Klump <sourcecode@intheloftstudios.com>"
