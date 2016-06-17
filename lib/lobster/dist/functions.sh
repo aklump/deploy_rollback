@@ -6,19 +6,20 @@
 #
 # Load the configuration cascade by name
 # 
-# Given 1='lobster' the files will load in this order
+# Given 1='my_app' the files will load in this order
 # 
-# 1. $LOBSTER_ROOT/.lobsterconfig
-# 2. $LOBSTER_APP_ROOT/.lobsterconfig
-# 3. ~/.lobsterconfig
-# 4. $pwd/.lobsterconfig
+# 2. $LOBSTER_APP_ROOT/.my_appconfig
+# 3. ~/.my_appconfig
 # 5. The first file found in parent dirs, if found.
 # 
-# @param string app name, e.g. 'lobster'
+# @param string app name, e.g. 'my_app'
 #
 function lobster_load_config() {
   base=$1
-  declare -a cascade=("$LOBSTER_ROOT/$base" "$LOBSTER_APP_ROOT/$base" "$HOME/$base" "$PWD/$base");
+  if ! test -e "$LOBSTER_APP_ROOT/install/$base"; then
+    lobster_failed "App defaults must be declard in /install/$base";
+  fi
+  declare -a cascade=("$LOBSTER_APP_ROOT/install/$base" "$HOME/$base" "$LOBSTER_INSTANCE_ROOT/$base" );
   for file in "${cascade[@]}"; do
     if [ -f "$file" ]; then
       lobster_core_verbose "Loading config file: $file"
@@ -26,11 +27,11 @@ function lobster_load_config() {
     fi
   done
 
-  path=$(lobster_upfind $base && echo "$lobster_upfind_dir")
-  if [ "$path" != "" ] && [ -f "$path" ]; then
-    source "$path"
-    lobster_core_verbose "Loading config file: $path"
-  fi
+#  path=$(lobster_upfind $base && echo "$lobster_upfind_dir")
+#  if [ "$path" != "" ] && [ -f "$path" ]; then
+#    source "$path"
+#    lobster_core_verbose "Loading config file: $path"
+#  fi
 }
 
 function lobster_verbose() {
@@ -118,10 +119,8 @@ function lobster_notice() {
 # commands.
 #
 function lobster_color() {
-
   # First allow the passing of a number
   lobster_color_current=$1
-
 
   case $1 in
     
@@ -307,14 +306,19 @@ function lobster_theme() {
 function lobster_failed() {
   lobster_error "$1"
   lobster_include "failed"
+  lobster_exit 1
 }
 
 #
 # Prints the footer and exits the script
 function lobster_exit() {
+  local status=0
+  if [ "$1" ]; then
+    status=$1
+  fi
   lobster_theme 'footer'
-  lobster_include 'shutdown'  
-  exit;
+  lobster_include 'shutdown'
+  exit $status
 }
 
 function lobster_show_debug {
@@ -375,6 +379,7 @@ function lobster_in_array() {
   done
   return 1  
 }
+
 
 #
 # Extracts all flags (values beginning with a single -) from an array
@@ -463,9 +468,37 @@ function lobster_has_flag() {
  #   1: it does not have the param
  #
 function lobster_has_param() {
-  for var in "${lobster_params[@]}"
-  do
+  for var in "${lobster_params[@]}"; do
     if [[ "$var" =~ $1 ]]; then
+      return 0
+    fi
+  done
+  return 1
+}
+
+##
+ # Test for a parameter
+ #
+ # @code
+ #   declare -a array=('ini' 'json' 'yaml' 'yml');
+ #   if lobster_has_params ${array[@]}; then
+ #     info_file="$lobster_app_name.$lobster_has_params_return";
+ #   fi
+ # @endcode
+ #
+ # @param string $1a
+ #   The param name to test for, omit the -
+ #
+ # @return int
+ #   0: it has one of the params; $lobster_has_params_return is set with the first matched param.
+ #   1: it does not have any of the param
+ #
+lobster_has_params_return=''
+function lobster_has_params() {
+  for var in "${lobster_params[@]}"; do
+    declare -a test=("$var" "${@}")
+    if lobster_in_array ${test[@]}; then
+      lobster_has_params_return="$var"
       return 0
     fi
   done
@@ -605,11 +638,49 @@ function  lobster_trim() {
  #   Sets the value of confirm_result
  #
 function lobster_confirm() {
-  lobster_color_echo "confirm" "$1 (y/n)?"
+  local esc=$lobster_escape_char
+  local fore=$lobster_color_confirm
+  local prompt="${esc}[${fore}m${1}? [y/N] ${esc}[0m"
+  local response
+
+  # The echo -n option suppresses the trailing newline.
+  echo -e -n $prompt
+  # -n 1 means to read just 1 char
   read -n 1 response && echo
-  if [ "$response" != 'y' ]; then
-    return 1
+  case $response in
+      [yY][eE][sS]|[yY])
+          return 0
+          ;;
+  esac
+  return 1
+}
+
+##
+ # Capture some input (w/optional default)
+ #
+ # @param string The question to ask.
+ # @param string An optional default value.
+ #
+ # @see $lobster_input_return
+ #
+ # @code
+ #   input=$(lobster_input "First day?" 'Sunday')
+ # @endcode
+ #
+lobster_input_return=''
+function lobster_input() {
+  local default="$2"
+  local esc=$lobster_escape_char
+  local fore=$lobster_color_input
+  local fore2=$lobster_color_input_suggestion
+  local prompt="$1"
+  local response
+  if [ "$default" ]; then
+    prompt="$prompt [${esc}[0m${esc}[${fore2}m$default${esc}[0m${esc}[${fore}m]${esc}[0m"
   fi
+  echo -e -n "${esc}[${fore}m${prompt}${esc}[${fore}m?:${esc}[0m "
+  read -e input
+  lobster_input_return="${input:-$default}"
 }
 
 ##
@@ -631,4 +702,27 @@ function lobster_datetime() {
  #
 function lobster_time() {
   echo $(date +"%s")
+}
+
+##
+ # Determine if a shell function exists
+ #
+function lobster_function_exists() {
+  declare -f -F $1 > /dev/null
+  return $?
+}
+
+##
+ # Access check for routing.
+ #
+function lobster_access() {
+  if ! lobster_function_exists $1; then
+    lobster_failed "The required access callback '$1' does not exist."
+  fi
+  if ! eval ${1}; then
+    if [ "$lobster_access_denied" ]; then
+      lobster_error "$lobster_access_denied"
+    fi
+    lobster_failed
+  fi
 }
