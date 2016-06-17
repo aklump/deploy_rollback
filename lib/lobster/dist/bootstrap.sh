@@ -31,7 +31,7 @@ lobster_core_verbose "Args: ${lobster_args[@]}"
 # Load the configuration for lobster and the app's overrides for lobster
 source "$LOBSTER_ROOT/.lobsterconfig"
 if ! test -e "$LOBSTER_APP_ROOT/.lobsterconfig"; then
-  lobster_failed "Can't boostrap, missing .lobsterconfig in the app root"
+  lobster_failed "Can't bootstrap, missing .lobsterconfig in the app root"
 fi
 source "$LOBSTER_APP_ROOT/.lobsterconfig"
 if [ ! "$lobster_app_config" ]; then
@@ -129,11 +129,13 @@ export LOBSTER_INSTANCE_ROOT
 export LOBSTER_TMPDIR
 
 # Run the app's config at the last moment to maximum variable access.
+
 lobster_load_config "$lobster_app_config"
 
 # Bootstrap the project layer
+lobster_op=${lobster_args[0]}
 lobster_include 'bootstrap'
 
-# Keep this here to allow app bootstrap to modify the arguments before we assign the op.
+# Keep this reassign here to allow app bootstrap to modify the arguments before we assign the op.
 lobster_op=${lobster_args[0]}
 lobster_include 'functions'
