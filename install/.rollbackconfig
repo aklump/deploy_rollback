@@ -22,7 +22,7 @@ rb_git_fetch_command="fetch"
 rb_git_merge_command="merge origin/master --ff-only"
 
 # Path to the Drupal core root.
-rb_drupal_root="$LOBSTER_PWD_ROOT/web"
+rb_drupal_root="$rb_git_root/web"
 
 # Path to the Drush binary used by the script.
 rb_drush=$(which drush)

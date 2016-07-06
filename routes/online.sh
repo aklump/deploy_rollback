@@ -2,12 +2,13 @@
 #
 # Take drupal online and echo a response
 #
-
 lobster_notice "Checking Drupal status..."
 changed=false
 if ! is_drupal_online; then
-  changed=true
-  (cd $rb_drush_root && $rb_drush vset site_offline 0)
+  changed=false
+  if drupal_set_maintenance 0; then
+    changed=true
+  fi
 fi
 
 if ! is_drupal_online; then

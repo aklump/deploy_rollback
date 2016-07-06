@@ -19,12 +19,43 @@ function is_drupal_root () {
 # Determine if drupal is online or not.
 #
 function is_drupal_online() {
-  status=$(cd $rb_drush_root && $rb_drush vget site_offline --exact)
+  case $rb_drupal_major_version in
+  6)
+    status='vget site_offline --exact'
+    ;;
+  7)
+    status='vget maintenance_mode --exact'
+    ;;
+  8)
+    status='state-get system.maintenance_mode --format=string'
+    ;;
+  esac
+
+  status=$(cd $rb_drush_root && $rb_drush $status)
   regex="true|1"
   if [[ "$status" =~ $regex ]]; then
     return 1;
   fi
   return 0;
+}
+
+#
+# Set the maintenance mode to 1 or 0 by argument
+#
+function drupal_set_maintenance() {
+ case $rb_drupal_major_version in
+  6)
+    command="vset site_offline $1"
+    ;;
+  7)
+    command="vset maintenance_mode $1"
+    ;;
+  8)
+    command="state-set system.maintenance_mode $1"
+    ;;
+  esac
+
+  return $(cd $rb_drush_root && $rb_drush $command)
 }
 
 function may_rollback() {

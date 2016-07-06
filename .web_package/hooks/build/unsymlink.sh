@@ -5,4 +5,5 @@
 # 
 if test -e ~/bin/grab; then
   (cd ./lib && grab -f lobster)
+  (cd ./lib && grab -f loft_php_lib)
 fi

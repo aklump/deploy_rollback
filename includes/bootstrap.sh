@@ -12,3 +12,9 @@ else
   rb_data_dir=$LOBSTER_INSTANCE_ROOT/.rollback
   rb_db_dir=$(cd $rb_loft_deploy_root && $rb_loft_deploy get local_db_dir)
 fi
+
+# Determine the major version of Drupal
+RB_DRUPAL_ROOT=$rb_drupal_root
+export RB_DRUPAL_ROOT
+rb_drupal_version=$(cd $rb_drupal_root && lobster_include 'drupal_get_version')
+rb_drupal_major_version=${rb_drupal_version%%.*}
