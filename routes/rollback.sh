@@ -20,7 +20,7 @@ fi
 lobster_log deploy "Rolling back the $rb_site_role environment to ($hash)." rollback
 
 # Take the site offline.
-$LOBSTER_APP offline -f --lobster-nowrap
+(cd $LOBSTER_PWD && $LOBSTER_APP offline -f --lobster-nowrap)
 
 # Rollback the db
 lobster_success "Restoring the database..."
@@ -30,4 +30,4 @@ lobster_success "Restoring the database..."
 (cd $rb_git_root && $rb_git reset --hard $hash)
 
 # Take the site online.
-$LOBSTER_APP online -f --lobster-nowrap
+(cd $LOBSTER_PWD && $LOBSTER_APP online -f --lobster-nowrap)
