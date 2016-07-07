@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-rb_version="0.1.38"
+rb_version="0.1.39"
 
 # If we're not initialized then make note.
 if [ ! "$LOBSTER_INSTANCE_ROOT" ]; then
