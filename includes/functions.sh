@@ -58,6 +58,25 @@ function drupal_set_maintenance() {
   return $(cd $rb_drush_root && $rb_drush $command)
 }
 
+#
+# Clear drupal's cache (based on version)
+#
+function drupal_flush_caches() {
+ case $rb_drupal_major_version in
+  6)
+    command="cache-clear all"
+    ;;
+  7)
+    command="cache-clear all"
+    ;;
+  8)
+    command="cache-rebuild"
+    ;;
+  esac
+
+  return $(cd $rb_drush_root && $rb_drush $command)
+}
+
 function may_rollback() {
   if test -e "$rb_data_dir/hash_rollback.txt"; then
     return 0

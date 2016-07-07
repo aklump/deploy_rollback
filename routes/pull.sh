@@ -86,7 +86,7 @@ fi
 # Clear all caches unless we have the parameter to not do so.
 if ! lobster_has_param 'nocc'; then
   lobster_color_echo yellow "Clearing Drupal's cache..."
-  (cd $rb_drush_root && $rb_drush cc all)
+  drupal_flush_caches
 else
   lobster_color_echo yellow 'Skipping drupal cache clearing per --nocc'
 fi
