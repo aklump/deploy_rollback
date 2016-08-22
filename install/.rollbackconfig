@@ -10,7 +10,7 @@ rb_site_role=live
 rb_site_title="Live/Production"
 
 # Path to the Git binary used by the script.
-rb_git=$(which git)
+rb_git=$(type git >/dev/null 2>&1 && which git)
 
 # Path the top level of the git repo.
 rb_git_root="$LOBSTER_PWD_ROOT"
@@ -25,13 +25,13 @@ rb_git_merge_command="merge origin/master --ff-only"
 rb_drupal_root="$rb_git_root/web"
 
 # Path to the Drush binary used by the script.
-rb_drush=$(which drush)
+rb_drush=$(type drush >/dev/null 2>&1 && which drush)
 
 # Path where drush can be run for context, usually drupal root unless you're on a multisite in which case it's probably 'sites/{sitename}'
 rb_drush_root="$rb_drupal_root"
 
 # Path to the Loft Deploy binary used by the script.
-rb_loft_deploy=$(which loft_deploy)
+rb_loft_deploy=$(type loft_deploy >/dev/null 2>&1 && which loft_deploy)
 
 # Path to a folder where loft_deploy commands can be executed from.
 rb_loft_deploy_root="$rb_git_root"

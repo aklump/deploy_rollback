@@ -64,13 +64,13 @@ function drupal_set_maintenance() {
 function drupal_flush_caches() {
  case $rb_drupal_major_version in
   6)
-    command="cache-clear all"
+    command="cache-clear all --no-halt-on-error"
     ;;
   7)
-    command="cache-clear all"
+    command="cache-clear all --no-halt-on-error"
     ;;
   8)
-    command="cache-rebuild"
+    command="cache-rebuild --no-halt-on-error"
     ;;
   esac
 
